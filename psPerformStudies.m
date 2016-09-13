@@ -1,3 +1,15 @@
+% ars = psPerformStudies(studies, flag)
+% 
+%   flag        ''  normal mode
+%               'test' = test mode, i.e. a fast version used to check the
+%               code
+% 
+% Examples:
+%   studies = psDefineStudyExamples;
+%   psPerformStudies(studies, 'test')
+%   ars = psPerformStudies(studies);
+% 
+
 function ars = psPerformStudies(studies, flag)
 if(~exist('flag','var') || isempty(flag))
     flag = '';
@@ -18,23 +30,8 @@ for s=1:length(studies)
         %     try
         if(~isempty(studies(s).fun_setup))
 
-%             checkVariable = 1;
-%             save('beforeSetup.mat');
             doEvalSetup(studies(s).fun_setup);
                             
-% if ~exist('checkVariable','var')   % clear all has been executed
-%     % reload existing variables is a 'clear all' command was in the
-%     % setup file
-%     vars_setup = who;
-%     tmp = load('beforeSetup');
-%     vars_before = fieldnames(tmp);
-%     fn_load = setdiff(vars_before,vars_setup);
-%     for f=1:length(fn_load)
-%         eval([fn_load{f},' = tmp.',fn_load{f},';']);
-%     end
-% else
-%     system('rm beforeSetup.mat');
-% end
             close all
             if(~isempty(studies(s).workspace))
                 arLoadPars(studies(s).workspace)
@@ -48,7 +45,7 @@ for s=1:length(studies)
         end
         
         if(~isempty(studies(s).fun_analysis))
-            ars{s} = feval(studies(s).fun_analysis,ar, studies(s), flag);
+            ars{s} = feval(studies(s).fun_analysis,ar, studies(s), flag);            
         end
         
         save([studies(s).date,'_psPerformStudies_Result'])
