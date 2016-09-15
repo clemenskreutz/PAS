@@ -48,7 +48,7 @@ for s=1:length(studies)
             ars{s} = feval(studies(s).fun_analysis,ar, studies(s), flag);            
         end
         
-        save([studies(s).date,'_psPerformStudies_Result'])
+        save([studies(s).date,'_psPerformStudies_Result_',flag])
     catch err
         cd(oldpath)
         rethrow(err)

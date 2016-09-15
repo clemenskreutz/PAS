@@ -14,12 +14,12 @@ file_studies_mat = [computer,'_studies.mat'];
 file_test_mat = [computer,'_psPerformanceStudies_test.mat'];
 %%  Copy Examples
 if ~exist('Studies','dir')
-    psCopyExamples;
+    psCopyExamples([],1);
 end
 
 %% Define studies and save
 if ~exist(file_studies_mat,'file')
-    studies = psDefineStudyExamples;
+    studies = psDefineStudyExamples([],1);
     save(file_studies_mat,'studies')
 end
 
@@ -37,11 +37,15 @@ if ~exist(file_test_mat,'file')
     save(file_test_mat,'studies','ars');
 end
 
-ars = psPerformStudies(studies);
+ars = psPerformStudies(studies,'first');
+
+% arsHyper = psPerformStudies(studies,'hyper');
+% arsFinal = psPerformStudies(studies,'final');
+% ars = [arsHyper,arsFinal];
 save psPerformanceStudies_last
 
 %%
-load psPerformanceStudies_last
+% load psPerformanceStudies_last
 % ars = psCollectStudyResults(studies,patterns);
 [arProp,fitProp] = psModelProperties([ars{:}]);
 
