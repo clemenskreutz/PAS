@@ -4,16 +4,22 @@
 %               'test' = test mode, i.e. a fast version used to check the
 %               code
 % 
+%   StudyName   important for tmp-workspace (for restarting in case of
+%               segmentation fault)
+% 
 % Examples:
 %   studies = psDefineStudyExamples;
 %   psPerformStudies(studies, 'test')
 %   ars = psPerformStudies(studies);
 % 
 
-function ars = psPerformStudies(studies, flag)
+function ars = psPerformStudies(studies, flag, StudyName)
 if(~exist('flag','var') || isempty(flag))
     flag = '';
     %     flag = 'test';
+end
+if(~exist('StudyName','var') || isempty(StudyName))
+    StudyName = '';
 end
 
 global ar
@@ -27,10 +33,9 @@ for s=1:length(studies)
     
     
     try
+        cd(strrep(studies(s).path,pw,''))
         psLoadSaveTmp
     
-        cd(strrep(studies(s).path,pw,''))
-        
         %     try
         if(~isempty(studies(s).fun_setup))
 
