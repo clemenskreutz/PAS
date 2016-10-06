@@ -24,7 +24,11 @@ pw = [pwd,filesep];
 for s=1:length(studies)
     %     cd(studies(s).path)
     oldpath = pwd;
+    
+    
     try
+        psLoadSaveTmp
+    
         cd(strrep(studies(s).path,pw,''))
         
         %     try
@@ -49,6 +53,9 @@ for s=1:length(studies)
         end
         
         save([studies(s).date,'_psPerformStudies_Result_',flag])
+    
+        psDeleteTmp
+    
     catch err
         cd(oldpath)
         rethrow(err)

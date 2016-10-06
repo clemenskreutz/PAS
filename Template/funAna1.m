@@ -28,10 +28,12 @@ ars = cell(0);
 %% which run mode?
 % mode 'test' should always be implemented as for quickly checking whether
 % the analysis works without errors
+niter = 1000;
 switch lower(option)
     case 'test'
         n = 3;
         dohyper = 0;
+        niter = 20;
     case 'first'
         n = 100;
         dohyper = 0;
@@ -54,7 +56,8 @@ randomseed = 0;
 %% Now evaluate interventions and comparator:
 
 % ar.config.optimizer = 1;  % here lsqnonlin
-% ar.config.nCVRestart= 1;
+ar.config.nCVRestart= 1;
+ar.config.optim.MaxIter = niter;
 
 arFitLHS(n, randomseed);
 close all

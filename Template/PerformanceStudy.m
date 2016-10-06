@@ -1,11 +1,30 @@
 %%
-if isunix
-    addpath('~/arFramework3/')
-    addpath('~/PAS/')
+if isunix  
+    if ~exist('arFramework3','dir')
+        system('cp -r ~/arFramework3 .');
+    end
+    addpath('arFramework3')
+
+    if ~exist('PAS','dir')
+        system('cp -r ~/PAS .');
+    end
+    addpath('PAS')
     addpath('~/ck')
+else
+    warning('Attention, under non-unix systems the current versions of D2D and PAS are not copied and saved.')    
+    warning('For having reproducibility this should be done.')    
 end
 
+
 clear all
+
+StudyName = '';
+if isempty(StudyName)
+    warning('No StudyName specified. No workspace for restarting analyses are saved ...');
+else
+    fprintf('PerformanceStudy %s started ...\n',StudyName);
+end
+
 pw = pwd;
 addpath([pw,filesep,'project_lib']);
 addpath(pw)
@@ -32,6 +51,8 @@ for s=1:length(studies)
     studies(s).fun_analysis = @funAna1;
 end
 
+psLoadSaveTmp
+
 if ~exist(file_test_mat,'file')
     ars = psPerformStudies(studies,'test');
     save(file_test_mat,'studies','ars');
@@ -43,6 +64,8 @@ ars = psPerformStudies(studies,'first');
 % arsFinal = psPerformStudies(studies,'final');
 % ars = [arsHyper,arsFinal];
 save psPerformanceStudies_last
+
+psDeleteTmp
 
 %%
 % load psPerformanceStudies_last
