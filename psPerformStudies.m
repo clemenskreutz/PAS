@@ -26,15 +26,23 @@ global ar
 
 ars = cell(size(studies));
 
+sstart = 1;
+psLoadSaveTmp  % if tmp-workspace available, this function overwrites sstart to start at the point were last analysis finished
+
 pw = [pwd,filesep];
-for s=1:length(studies)
+for s=sstart:length(studies)
     %     cd(studies(s).path)
+    sstart = s;
+
+    if s>1  % otherwise it has been done already (in any case)
+        psSaveTmp
+    end
+    
     oldpath = pwd;
     
     
     try
         cd(strrep(studies(s).path,pw,''))
-        psLoadSaveTmp
     
         %     try
         if(~isempty(studies(s).fun_setup))
@@ -58,15 +66,14 @@ for s=1:length(studies)
         end
         
         save([studies(s).date,'_psPerformStudies_Result_',flag])
-    
-        psDeleteTmp
-    
+        
     catch err
         cd(oldpath)
         rethrow(err)
     end
     
     cd(pw)
+    psDeleteTmp
     
     %     catch err
     %         diary Error
