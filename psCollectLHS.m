@@ -14,12 +14,15 @@
 %               i.e. selection if length(ar.chi2s)>= minsize
 %               Default: minsize = 100
 
-function ars = psCollectLHS(pfad,minsize)
+function ars = psCollectLHS(pfad,minsize,deleteDuplicates)
 if ~exist('pfad','var') || isempty(pfad)
     pfad = pwd;
 end
 if ~exist('minsize','var') || isempty(minsize)
     minsize = 100; % minimal number of lhs fits
+end
+if ~exist('deleteDuplicates','var') || isempty(deleteDuplicates)
+    deleteDuplicates = false; 
 end
 
 folders = dir_FoldersRecursive(pfad);
@@ -28,6 +31,10 @@ folders = [{pfad},folders];
 ars = cell(0);
 
 for f=1:length(folders)
+    if deleteDuplicates
+        psRemoveLhsDuplicates(folders{f})
+    end
+    
     d = dir(folders{f});
     d = d([d.isdir]==0);
     matfiles = {d(find(~cellfun(@isempty,regexp({d.name},'\.mat$')))).name};

@@ -4,7 +4,7 @@ stack = dbstack;
 
 if ~isempty(StudyName)
     if length(stack)>1  % call from a function
-        tmp_file = ['tmp_',StudyName,'_',stack(2).file(1:end-2),'.mat'];
+        tmp_file = ['unfinished_',StudyName,'_',stack(2).file(1:end-2),'.mat'];
         if exist(tmp_file,'file')  % process not finished => load workspace and continue
             delete(tmp_file);
         end
