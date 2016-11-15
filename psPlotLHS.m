@@ -6,12 +6,21 @@ if ~exist('fnlabel','var') || isempty(fnlabel)
     fnlabel = 'checkstr';
 end
 
+if ~iscell(fnlabel)
+    fnlabel = {fnlabel};
+end
+
 
 cols = colormap('lines');
 
 cstr = cell(size(ars));
 for i=1:length(ars)
-    cstr{i} = ars{i}.(fnlabel);
+    for f=1:length(fnlabel)
+        if f>1
+            cstr{i} = [cstr{i},' '];
+        end        
+        cstr{i} = [cstr{i},ars{i}.(fnlabel{f})];
+    end
     nfit = length(ars{i}.chi2s);
 end
 
