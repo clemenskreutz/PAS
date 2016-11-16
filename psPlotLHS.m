@@ -6,7 +6,7 @@
 %               Default: 1e4
 % 
 %   fnlabel     used for legend (and colors)
-%               fieldname of ar{} or ar{}.study
+%               fieldname of ar{} or ar{}.PerformanceStudy
 %               string or cell of strings 
 % Examples:
 % ars = psPerformStudies(studies,'first');
@@ -39,8 +39,8 @@ for i=1:length(ars)
     for f=1:length(fnlabel)
         if isfield(ars{i},fnlabel{f})
             tmp = ars{i}.(fnlabel{f});
-        elseif isfield(ars{i}.study,fnlabel{f})
-            tmp = ars{i}.study.(fnlabel{f});
+        elseif isfield(ars{i}.PerformanceStudy,fnlabel{f})
+            tmp = ars{i}.PerformanceStudy.(fnlabel{f});
         else
             warning([fnlabel{f},' not found'])
             tmp = '';
