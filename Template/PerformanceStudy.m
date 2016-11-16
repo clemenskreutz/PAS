@@ -3,12 +3,12 @@ if isunix
     if ~exist('arFramework3','dir')
         system('cp -r ~/arFramework3 .');
     end
-    addpath('arFramework3')
+    addpath([pwd,filesep,'arFramework3'])
 
     if ~exist('PAS','dir')
         system('cp -r ~/PAS .');
     end
-    addpath('PAS')
+    addpath([pwd,filesep,'PAS'])
     addpath('~/ck')
 else
     warning('Attention, under non-unix systems the current versions of D2D and PAS are not copied and saved.')    
@@ -18,7 +18,7 @@ end
 
 clear all
 
-StudyName = '';
+StudyName = '';  % Name of the study (optionally)
 if isempty(StudyName)
     warning('No StudyName specified. No workspace for restarting analyses are saved ...');
 else
@@ -36,7 +36,7 @@ if ~exist('Studies','dir')
     psCopyExamples([],1);
 end
 
-%% Define studies and save
+%% Define studies=example models and save
 if ~exist(file_studies_mat,'file')
     studies = psDefineStudyExamples([],1);
     save(file_studies_mat,'studies')
@@ -45,10 +45,10 @@ end
 %% load study design
 load(file_studies_mat)
 studies = studies([2:end,1]);  % mv Bachmann to the end
-% studies = studies(3)
+% studies = studies(3)  % usage of only a single model
 
 for s=1:length(studies)
-    studies(s).fun_analysis = @funAna1;
+    studies(s).fun_analysis = @funAna1;  % this function has to be edited to implement the comparison
 end
 
 psLoadSaveTmp
@@ -61,18 +61,19 @@ end
 ars = psPerformStudies(studies,'first');
 
 % arsHyper = psPerformStudies(studies,'hyper');
-% arsFinal = psPerformStudies(studies,'final');
+% arsFinal = psPerformStudies(studies,'final');  % uncomment this line for the large study
 % ars = [arsHyper,arsFinal];
 save psPerformanceStudies_last
 
 psDeleteTmp
 
-%%
-% load psPerformanceStudies_last
-% ars = psCollectStudyResults(studies,patterns);
-[arProp,fitProp] = psModelProperties([ars{:}]);
-
-% load psPerformanceStudies_last ars studies
-
-[arProp,iterProp] = psModelProperties(ars);
+%% Evaluation e.g. via logistic-regression (not yet fully implemented)
+% % load psPerformanceStudies_last
+% % ars = psCollectStudyResults(studies,patterns);
+% 
+% [arProp,fitProp] = psModelProperties([ars{:}]);
+% 
+% % load psPerformanceStudies_last ars studies
+% 
+% [arProp,iterProp] = psModelProperties(ars);
 

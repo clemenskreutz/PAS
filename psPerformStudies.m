@@ -64,6 +64,7 @@ for s=sstart:length(studies)
         if(~isempty(studies(s).fun_analysis))
             ars{s} = feval(studies(s).fun_analysis,ar, studies(s), flag);            
         end
+        ars{s}.study = studies(s);
         
         save([studies(s).date,'_psPerformStudies_Result_',flag])
         

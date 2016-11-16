@@ -1,9 +1,33 @@
+% chi2s = psPlotLHS(ars,ymax,fnlabel)
+%   
+%   ars         cell of ar-structs
+% 
+%   ymax        maximal value on the vertical axis (-2 log-likelhood)
+%               Default: 1e4
+% 
+%   fnlabel     used for legend (and colors)
+%               fieldname of ar{} or ar{}.study
+%               string or cell of strings 
+% Examples:
+% ars = psPerformStudies(studies,'first');
+% psPlotLHS([ars{:}],100)
+% psPlotLHS([ars{:}],100,'checkstr')
+
 function chi2s = psPlotLHS(ars,ymax,fnlabel)
 if ~exist('ymax','var') || isempty(ymax)
     ymax = 1e4;
 end
 if ~exist('fnlabel','var') || isempty(fnlabel)
-    fnlabel = 'checkstr';
+    fnlabel = cell(0);
+%     fnlabel{1} = 'checkstr';
+    fnlabel{1} = 'name';
+    if isfield(ars{1},'intervention')
+        fnlabel{2} = 'intervention';
+    end
+end
+
+if ischar(fnlabel)
+    fnlabel = {fnlabel};
 end
 
 
@@ -11,7 +35,23 @@ cols = colormap('lines');
 
 cstr = cell(size(ars));
 for i=1:length(ars)
-    cstr{i} = ars{i}.(fnlabel);
+    cstr{i} = '';
+    for f=1:length(fnlabel)
+        if isfield(ars{i},fnlabel{f})
+            tmp = ars{i}.(fnlabel{f});
+        elseif isfield(ars{i}.study,fnlabel{f})
+            tmp = ars{i}.study.(fnlabel{f});
+        else
+            warning([fnlabel{f},' not found'])
+            tmp = '';
+        end            
+        if isnumeric(tmp)
+            tmp = [fnlabel{f},'=',num2str(tmp)];
+        end
+        cstr{i} = [cstr{i},' ',tmp];
+    end
+    cstr{i} = strrep(cstr{i},'_','\_');
+    
     nfit = length(ars{i}.chi2s);
 end
 
@@ -34,7 +74,7 @@ for i=1:length(uni)
         h(i) = tmp(1);
     end        
 end
-legend(h,uni{:});
+legend(h,uni{:},'Location','NorthWest');
 ylim([0,ymax])
 
 
