@@ -62,7 +62,7 @@ ar.config.optim.MaxIter = niter;
 arFitLHS(n, randomseed);
 close all
 ar.intervention = 0; % label the comparator setting
-arSave(['funAna1_LHS_comparator_',option])
+arSave(['funAna1_LHS',num2str(n),'_comparator_',option])
 ars{end+1} = arDeepCopy(ar);
 
 
@@ -73,7 +73,7 @@ ars{end+1} = arDeepCopy(ar);
 arFitLHS(n, randomseed);
 close all
 ar.intervention = 1;  % optional step: consecutive number can be used to label different interventions
-arSave(['funAna1_LHS_intervention_',option])
+arSave(['funAna1_LHS',num2str(n),'_intervention_',option])
 ars{end+1} = arDeepCopy(ar);
 
 
@@ -92,7 +92,7 @@ if dohyper
     
         close all
         ar.intervention = fn{f};  % optional step: consecutive number can be used to label different interventions
-        arSave(['funAna1_LHS_intervention_',option,'_',fn{f}])
+        arSave(['funAna1_LHS',num2str(n),'_intervention_',option,'_',fn{f}])
         ars{end+1} = ar;
     end
 
