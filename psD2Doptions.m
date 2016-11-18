@@ -20,7 +20,7 @@ ex = struct;
 
 switch lower(whichone)
     case 'hyper1'
-        ex.tol_1over10 = 'ar.config.atol = ar.config.atol/10;ar.config.atol = ar.config.atol/10;';
+        ex.tol_1over10 = 'ar.config.atol = ar.config.atol/10;ar.config.rtol = ar.config.rtol/10;';
         ex.tol_times10 = 'ar.config.atol = ar.config.atol*10;ar.config.rtol = ar.config.rtol*10;';
         ex.tolV_negotiated = 'ar.config.atolV = double(~ar.config.atolV);ar.config.atolV_Sens = double(~ar.config.atolV_Sens);';
 
