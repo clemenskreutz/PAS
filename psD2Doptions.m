@@ -21,7 +21,7 @@ ex = struct;
 switch lower(whichone)
     case 'hyper1'
         ex.tol_1over10 = 'ar.config.atol = ar.config.atol/10;ar.config.atol = ar.config.atol/10;';
-        ex.tol_times10 = 'ar.config.atol = ar.config.rtol*10;ar.config.atol = ar.config.rtol*10;';
+        ex.tol_times10 = 'ar.config.atol = ar.config.atol*10;ar.config.rtol = ar.config.rtol*10;';
         ex.tolV_negotiated = 'ar.config.atolV = double(~ar.config.atolV);ar.config.atolV_Sens = double(~ar.config.atolV_Sens);';
 
         ex.fiterrors_negotiated = 'ar.config.fiterrors = double(~ar.config.fiterrors);';
@@ -38,14 +38,14 @@ switch lower(whichone)
         
     case 'odetols1'
         ex.atol_1over10 = 'ar.config.atol = ar.config.atol/10;';
-        ex.rtol_1over10 = 'ar.config.atol = ar.config.atol/10;';
-        ex.atol_times10 = 'ar.config.atol = ar.config.rtol*10;';
-        ex.rtol_times10 = 'ar.config.atol = ar.config.rtol*10;';
+        ex.rtol_1over10 = 'ar.config.rtol = ar.config.rtol/10;';
+        ex.atol_times10 = 'ar.config.atol = ar.config.atol*10;';
+        ex.rtol_times10 = 'ar.config.rtol = ar.config.rtol*10;';
         
         ex.atol_1over100 = 'ar.config.atol = ar.config.atol/100;';
-        ex.rtol_1over100 = 'ar.config.atol = ar.config.atol/100;';
-        ex.atol_times100 = 'ar.config.atol = ar.config.rtol*100;';
-        ex.rtol_times100 = 'ar.config.atol = ar.config.rtol*100;';
+        ex.rtol_1over100 = 'ar.config.rtol = ar.config.rtol/100;';
+        ex.atol_times100 = 'ar.config.atol = ar.config.atol*100;';
+        ex.rtol_times100 = 'ar.config.rtol = ar.config.rtol*100;';
 
     case 'lsqnonlin1'
         ex.optimizer_fmincon = 'ar.config.optimizer = 2;';
