@@ -91,7 +91,7 @@ elseif length(fnlabel)>=2
     if length(unif2)<=7
         cols = colormap('lines');
     else
-        cols = colormap('hsv');
+        cols = colormap('jet');
         cols = cols(round(interp1([1,length(unif2)],[1,size(cols,1)], 1:length(unif2))),:);
     end
     % color determined by level of labF2
@@ -103,7 +103,7 @@ elseif length(fnlabel)>=2
         imarker(i) = strmatch(labF1{i},unif1,'exact');
     end
 else
-    cols = colormap('hsv');
+    cols = colormap('jet');
     cols = cols(round(interp1([1,length(uni)],[1,size(cols,1)], 1:length(uni))),:);
     % each setting has different color
     icol = 1:length(uni);
