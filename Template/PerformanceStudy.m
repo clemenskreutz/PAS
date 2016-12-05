@@ -1,5 +1,12 @@
 %%
-if isunix  
+try
+   delete(gcp('nocreate'))
+end
+try
+   parpool
+end
+
+if isunix
     if ~exist('arFramework3','dir')
         system('cp -r ~/arFramework3 .');
     end
