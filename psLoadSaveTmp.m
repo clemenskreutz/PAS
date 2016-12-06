@@ -6,9 +6,15 @@
 
 stack = dbstack;
 
+if length(stack)<2
+    callingFunction = 'CommandLine';
+else
+    callingFunction = stack(2).file(1:end-2);
+end
+
 if ~isempty(StudyName)
     
-    tmp_file = ['unfinished_',StudyName,'_',stack(2).file(1:end-2),'.mat'];
+    tmp_file = ['unfinished_',StudyName,'_',callingFunction,'.mat'];
     if exist(tmp_file,'file')  % process not finished => load workspace and continue
         warning('Last run seems not finished properly. The following workspace is now loaded (and overwrites existing variables) for finishing analysis: %s ',tmp_file)
         load(tmp_file)
