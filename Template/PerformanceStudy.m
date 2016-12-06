@@ -9,14 +9,22 @@ end
 if isunix
     if ~exist('arFramework3','dir')
         system('cp -r ~/arFramework3 .');
+        try
+            system('rm -rf ./arFramework3/.git');
+        end
     end
     addpath([pwd,filesep,'arFramework3'])
 
     if ~exist('PAS','dir')
         system('cp -r ~/PAS .');
+        try
+            system('rm -rf ./PAS/.git');
+        end
     end
+    
     addpath([pwd,filesep,'PAS'])
     addpath('~/ck')
+
 else
     warning('Attention, under non-unix systems the current versions of D2D and PAS are not copied and saved.')    
     warning('For having reproducibility this should be done.')    
