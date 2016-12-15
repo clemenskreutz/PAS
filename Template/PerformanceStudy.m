@@ -33,7 +33,11 @@ end
 
 clear all
 
-StudyName = '';  % Name of the study (optionally)
+% Name of the study (optionally). The study name is used to distinguish
+% workspaces, e.g. if the analysis is interrupted and should be continued
+% (function psLoadSaveTmp).
+% If no StudyName is provided, this functionality is not used/available.
+StudyName = '';  
 if isempty(StudyName)
     warning('No StudyName specified. No workspace for restarting analyses are saved ...');
 else
