@@ -3,7 +3,7 @@ try
    delete(gcp('nocreate'))
 end
 try
-   parpool
+   parpool('local')
 end
 
 if isunix

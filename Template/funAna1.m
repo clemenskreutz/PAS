@@ -54,6 +54,9 @@ end
 randomseed = 0;
 
 %% Now evaluate interventions and comparator:
+% for m=1:length(ar.model)
+%     ar.model(m).qPositiveX(:) = 1;
+% end
 
 % ar.config.optimizer = 1;  % here lsqnonlin
 ar.config.nCVRestart= 1;
