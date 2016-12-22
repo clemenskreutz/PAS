@@ -1,25 +1,41 @@
 %  psCopyExamples
 %  psCopyExamples(pattern)
-% 
+%  psCopyExamples(pattern,withoutQuestions,std_examples)
+%
+%
 %   This function goes through all examples in the D2D folder 'Examples'
 %   and asks the user whether the individual application should be copied
 %   into a folder 'Studies' for performing furhter analyses like a
 %   performance-study.
-% 
+%
 %   pattern         pattern for specifying a subset of example models which
 %                   are presented for selection.
-% 
-% Example: 
+%                   The pattern is only evaluated for the standard
+%                   examples!
+%
+% Example:
 %   psCopyExamples
 % psCopyExamples('Swa')
 % psCopyExamples([],1)  % without asking questions
 
-function psCopyExamples(pattern,withoutQuestions)
+function psCopyExamples(pattern,withoutQuestions,std_examples)
 if(~exist('pattern','var') || isempty(pattern))
     pattern = '';
 end
 if ~exist('withoutQuestions','var') || isempty(withoutQuestions)
     withoutQuestions = 0;
+end
+if ~exist('std_examples','var') || isempty(std_examples)
+    std_examples = {'Bachmann_MSB2011',...
+        'Becker_Science2010',...
+        'Boehm_JProteomeRes2014',...
+        'Bruno_Carotines_JExpBio2016',...
+        'Dream6',...
+        'Merkle_JAK2STAT5_PCB2016',...
+        'Raia_CancerResearch2011',...
+        'Swameye_PNAS2003',...
+        'Schwen_InsulinMouseHepatocytes_PlosOne2014',...
+        'Toensing_InfectiousDiseaseModels2016'};
 end
 
 arpath = [fileparts(which('arInit')),filesep];
@@ -38,16 +54,6 @@ end
 if(~exist('Studies','dir'))
     mkdir('Studies');
 end
-
-std_examples = {'Bachmann_MSB2011',...
-    'Becker_Science2010',...
-    'Boehm_JProteomeRes2014',...
-    'Bruno_Carotines_JExpBio2016',...
-    'Dream6',...
-    'Raia_CancerResearch2011',...
-    'Swameye_PNAS2003',...
-    'Schwen_InsulinMouseHepatocytes_PlosOne2014',... 
-    'Toensing_InfectiousDiseaseModels2016'};
 
 
 if withoutQuestions
@@ -69,7 +75,7 @@ end
 
 
 if ~isempty(in) && (strcmp(lower(in),'n') || strcmp(lower(in),'no'))   % copy by hand
-
+    
     for i=1:length(ds)
         askstring = sprintf('Do you wish to copy example %20s?       [yes: Press button or ''y'', no: type ''n'', CTRL+c for exit] ',['''',ds{i},'''']);
         in = deblank(input(askstring,'s'));
@@ -78,24 +84,66 @@ if ~isempty(in) && (strcmp(lower(in),'n') || strcmp(lower(in),'no'))   % copy by
             %         evstr = sprintf('copy -r %s%s Studies',examplePath,ds{i});
             %         disp(evstr)
             %         system(evstr);
-            suc = copyfile([examplePath,ds{i}],['Studies',filesep,ds{i}]);
+            suc = doCopy([examplePath,ds{i}],['Studies',filesep,ds{i}],ds{i});
             if(~suc)
                 warning('%s could not be copied.',ds{i})
             end
-        end                
+        end
     end
     
 else  % use std_examples
-    for i=1:length(std_examples)
-        if ~exist(['Studies',filesep,std_examples{i}],'dir')
-            suc = copyfile([examplePath,std_examples{i}],['Studies',filesep,std_examples{i}]);
-            fprintf('Example copied to %s.\n',['Studies',filesep,std_examples{i}]);
-            if(~suc)
-                warning('%s could not be copied.',std_examples{i})
-            end
-        else
-            fprintf('%s already exists.\n',['Studies',filesep,std_examples{i}]);
-        end
+    ds = intersect(ds,std_examples);
+    for i=1:length(ds)
+        suc = doCopy([examplePath,ds{i}],['Studies',filesep,ds{i}],ds{i});
     end
 end
 
+
+% this function can handle special cases
+function suc = doCopy(source,target,option)
+if ~exist('option','var') || isempty(option)
+    option = '';
+end
+
+switch option
+    case 'Merkle_JAK2STAT5_PCB2016'
+        
+        newtarget = strrep(target,option,[option,'_CFUE']);
+        suc = doCopySingle(source,newtarget);
+        if suc
+            delfils = strcat(newtarget,filesep,{'SetupComprehensive.m','SetupFinal.m','SetupH838.m','SetupSens.m'});
+            delete(delfils{:});
+        end
+        
+        newtarget = strrep(target,option,[option,'_H838']);
+        suc = doCopySingle(source,newtarget);
+        if suc
+            delfils = strcat(newtarget,filesep,{'SetupComprehensive.m','SetupFinal.m','SetupCFUE.m','SetupSens.m'});
+            delete(delfils{:});
+        end
+        
+        newtarget = strrep(target,option,[option,'_CFUE+H838']);
+        suc = doCopySingle(source,newtarget);
+        if suc
+            delfils = strcat(newtarget,filesep,{'SetupComprehensive.m','SetupCFUE.m','SetupH838.m','SetupSens.m'});
+            delete(delfils{:});
+        end
+        
+    otherwise
+        suc = doCopySingle(source,target);
+end
+
+
+% this function applies the copy command
+function suc = doCopySingle(source,target)
+if ~exist(target,'dir')
+    suc = copyfile(source,target);
+    
+    if(~suc)
+        warning('%s could not be copied.',source)
+    else
+        fprintf('Example %s copied to %s.\n',source,target);
+    end
+else
+    fprintf('%s already exists.\n',target);
+end
