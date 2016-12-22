@@ -77,10 +77,10 @@ if ~exist(file_test_mat,'file')
     save(file_test_mat,'studies','ars');
 end
 
-ars = psPerformStudies(studies,'first');
+ars = psPerformStudies(studies,'first',StudyName);
 
-% arsHyper = psPerformStudies(studies,'hyper');
-% arsFinal = psPerformStudies(studies,'final');  % uncomment this line for the large study
+% arsHyper = psPerformStudies(studies,'hyper',StudyName);
+% arsFinal = psPerformStudies(studies,'final',StudyName);  % uncomment this line for the large study
 % ars = [arsHyper,arsFinal];
 save psPerformanceStudies_last
 

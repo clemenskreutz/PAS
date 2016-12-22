@@ -149,7 +149,10 @@ else
     end
     legend(h,uni{:},'Location','NorthWest');
     ylim([0,ymax])
-
+    xlabel('Fit rank')
+    ylabel('Objective function')
+    set(gca,'FontSize',14)
+    
     try
         paperwidth('a4quer')
     end

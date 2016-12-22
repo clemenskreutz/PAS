@@ -46,6 +46,7 @@ std_examples = {'Bachmann_MSB2011',...
     'Dream6',...
     'Raia_CancerResearch2011',...
     'Swameye_PNAS2003',...
+    'Schwen_InsulinMouseHepatocytes_PlosOne2014',... 
     'Toensing_InfectiousDiseaseModels2016'};
 
 
@@ -55,11 +56,15 @@ else
     disp('Performing the Method Evaluation Study based on the standard examples or on examples selected by hand?')
     fprintf('Current definition of the standard examples comprise the following models: \n');
     std_examples = intersect(ds,std_examples);
-    fprintf('%s, ',std_examples{:})
-    fprintf('\n');
-    
-    askstring = sprintf('Do you wish to copy these standard examples?   [yes: Press button or ''y'', no=use examples manually: type ''n'', CTRL+c for exit] ');
-    in = deblank(input(askstring,'s'));
+    if ~isempty(std_examples)
+        fprintf('%s, ',std_examples{:})
+        fprintf('\n');
+        
+        askstring = sprintf('Do you wish to copy these standard examples?   [yes: Press button or ''y'', no=use examples manually: type ''n'', CTRL+c for exit] ');
+        in = deblank(input(askstring,'s'));
+    else
+        in = '';
+    end
 end
 
 
