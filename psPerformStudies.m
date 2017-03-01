@@ -23,6 +23,7 @@ if(~exist('StudyName','var') || isempty(StudyName))
 end
 
 global ar
+diary(['psPerformStudies_',flag,'.log'])
 
 ars = cell(size(studies));
 
@@ -62,6 +63,7 @@ for s=sstart:length(studies)
         end
         
         if(~isempty(studies(s).fun_analysis))
+            fprintf('psPerformStudies, iteration %i, name=%s started ...\n',s,studies(s).name);
             ars{s} = feval(studies(s).fun_analysis,ar, studies(s), flag);            
         end
         
@@ -69,6 +71,7 @@ for s=sstart:length(studies)
         
     catch err
         cd(oldpath)
+        diary off
         rethrow(err)
     end
     
@@ -83,6 +86,7 @@ for s=sstart:length(studies)
     %         cd(pw);
     %     end
     
+    diary off
 end
 
 function doEvalSetup(fun_setup)

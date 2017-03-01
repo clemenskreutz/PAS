@@ -54,23 +54,29 @@ if iscell(ars{1})
 else
     
     figure
+    hold on
     
     cstr = cell(size(ars));
     labF1 = cell(size(ars));
     labF2 = cell(size(ars));
+    namen = cell(size(ars));
+    iplot = [];
     for i=1:length(ars)
+        namen{i} = ars{i}.model(1).name;
         cstr{i} = '';
         for f=1:length(fnlabel)
             if isfield(ars{i},fnlabel{f})
-                tmp = ars{i}.(fnlabel{f});
-            elseif isfield(ars{i}.PerformanceStudy,fnlabel{f})
+                tmp = ars{i}.(fnlabel{f});                
+            elseif isfield(ars{i},'PerformanceStudy') && isfield(ars{i}.PerformanceStudy,fnlabel{f})
                 tmp = ars{i}.PerformanceStudy.(fnlabel{f});
+                namen{i} = ars{i}.PerformanceStudy.name;
             else
                 warning([fnlabel{f},' not found'])
-                tmp = '';
+                tmp = ars{i}.model(1).name;
             end
             if isnumeric(tmp)
-                tmp = [fnlabel{f},'=',num2str(tmp)];
+%                 tmp = [fnlabel{f},'=',num2str(tmp)];
+                tmp = [fnlabel{f},'=',sprintf('%3d',tmp)];
             end
             cstr{i} = [cstr{i},' ',tmp];
             if f==1
@@ -131,23 +137,34 @@ else
     
     
     %% do plotting
-    
-    hold on
-    for i=1:length(uni)
-        ind = strmatch(uni{i},cstr,'exact');
-        chi2min = Inf;
+    uniname = unique(namen);
+    chi2min = NaN(size(uniname));  % length and order like uniname;
+    for i=1:length(uniname)
+        % chi2min muss immer über 'name' berechnet werden.
+        chi2min(i) = Inf;
+        ind = strmatch(uniname{i},namen,'exact');
         for j=1:length(ind)
-            chi2min = min(chi2min,min(ars{ind(j)}.chi2s));
-        end
-        
-        for j=1:length(ind)
-            chi2s{ind(j)} = sort(ars{ind(j)}.chi2s) - chi2min;
-            %         chi2s{ind(j)}(chi2s{ind(j)}>ymax) = NaN;
-            tmp = plot(linspace(1,nfitmax,length(chi2s{ind(j)})), chi2s{ind(j)},'-','Color',cols(icol(ind(j)),:),'Marker', markers{imarker(ind(j))});
-            h(i) = tmp(1);
+            chi2min(i) = min(chi2min(i),min(ars{ind(j)}.chi2s));
         end
     end
-    legend(h,uni{:},'Location','NorthWest');
+    
+    h = [];
+    for i=1:length(uni)
+        ind = strmatch(uni{i},cstr,'exact');
+        
+        for j=1:length(ind)
+            indname = strmatch(namen{ind(j)},uniname,'exact');            
+            chi2s{ind(j)} = sort(ars{ind(j)}.chi2s) - chi2min(indname);
+            
+            %         chi2s{ind(j)}(chi2s{ind(j)}>ymax) = NaN;
+%             tmp = plot(linspace(1,nfitmax,length(chi2s{ind(j)})), chi2s{ind(j)},'-','Color',cols(icol(ind(j)),:),'Marker', markers{imarker(ind(j))});
+            tmp = plot(linspace(1,nfitmax,length(chi2s{ind(j)})), chi2s{ind(j)},'-','Color',cols(i,:),'Marker', markers{imarker(ind(j))});
+            h(i) = tmp(1);
+            iplot = [iplot,ind(j)];
+        end
+    end
+%     legend(h,uni{:},'Location','NorthWest');
+    legend(h,uni{:},'Location','best');
     ylim([0,ymax])
     xlabel('Fit rank')
     ylabel('Objective function')

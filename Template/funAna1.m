@@ -20,6 +20,7 @@ ar = arIn;
 ar.PerformanceStudy = study;
 ar.PerformanceStudy.computer = computer;
 ar.PerformanceStudy.dateOfAnalysis = datestr(now,30);
+ar.PerformanceStudy.pwd = pwd;
 
 arSave('funAna1');
 

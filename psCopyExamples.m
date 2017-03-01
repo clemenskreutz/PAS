@@ -145,5 +145,6 @@ if ~exist(target,'dir')
         fprintf('Example %s copied to %s.\n',source,target);
     end
 else
+    suc = 0;
     fprintf('%s already exists.\n',target);
 end
