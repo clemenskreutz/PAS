@@ -44,10 +44,12 @@ if iscell(ars{1})
     close all
     chi2s = cell(size(ars));
     for i=1:length(ars)
-        if fn_given ==0
-            chi2s{i} = psPlotLHS([ars{i}],ymax);
-        else
-            chi2s{i} = psPlotLHS([ars{i}],ymax, fnlabel);
+        if ~isempty(ars{i})
+            if fn_given ==0
+                chi2s{i} = psPlotLHS([ars{i}],ymax);
+            else
+                chi2s{i} = psPlotLHS([ars{i}],ymax, fnlabel);
+            end
         end
     end
     
