@@ -52,12 +52,20 @@ for s=sstart:length(studies)
                             
             close all
             if(~isempty(studies(s).workspace))
-                arLoadPars(studies(s).workspace)
+                try
+                    arLoadPars(studies(s).workspace)
+                catch
+                    warning('psPerformStudies.m: Parameter from workspace %s cound not be loaded: %s \n',studies(s).workspace,'arLoadPars(studies(s).workspace)')
+                end
                 close all
             end
         else
             if(~isempty(studies(s).workspace))
-                arLoad(studies(s).workspace)
+                try
+                    arLoad(studies(s).workspace)
+                catch
+                    warning('psPerformStudies.m: Parameter from workspace %s cound not be loaded: %s \n',studies(s).workspace,'arLoad(studies(s).workspace)')
+                end
                 close all
             end
         end
