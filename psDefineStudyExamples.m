@@ -12,6 +12,10 @@ if ~exist('withoutQuestions','var') || isempty(withoutQuestions)
     withoutQuestions = 0;
 end
 
+if ~exist(studyfolder,'dir')
+    error('studyfolder %s does not exist.',studyfolder)
+end
+
 d = dir(studyfolder);
 
 ds = {d.name};
@@ -109,7 +113,12 @@ for i=1:length(ds)
                 end
                 in = str2num(input(sprintf('Please choose (1-%i) : ',length(ws)),'s'));
             else
-                in = 1;
+                [~,~,ia] = intersect(lower('BestFit'),lower(ws));
+                if ~isempty(ia)
+                    in = ia;
+                else
+                    in = 1;  % default workspace 
+                end
             end
             
             if(isempty(in))

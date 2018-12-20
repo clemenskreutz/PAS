@@ -13,6 +13,9 @@
 %               If more than 7  settings are plotted, the 1st fnlabel
 %               determines the marker and the 2nd fnlabel determines th
 %               color
+% 
+%   exist('replaceFun')==2 for user-defined replacements of the legend
+%   labels
 %
 % Examples:
 % ars = psPerformStudies(studies,'first');
@@ -88,7 +91,9 @@ else
             end
         end
         cstr{i} = strrep(cstr{i},'_','\_');
-        
+        if exist('replaceFun')==2 % function exisets
+            cstr{i} = replaceFun(cstr{i});
+        end
         nfit = length(ars{i}.chi2s);
     end
     
@@ -166,13 +171,13 @@ else
         end
     end
 %     legend(h,uni{:},'Location','NorthWest');
-    legend(h,uni{:},'Location','best');
+    set(legend(h,uni{:},'Location','best'),'FontSize',12);
     ylim([0,ymax])
-    xlabel('Fit rank')
-    ylabel('Objective function')
+    xlabel('Fit rank','FontSize',14)
+    ylabel('Objective function','FontSize',14)
     set(gca,'FontSize',14)
     
     try
-        paperwidth('a4quer')
+%         paperwidth('a4quer')
     end
 end
